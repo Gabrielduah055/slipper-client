@@ -1,0 +1,9 @@
+.product-card:hover .quick-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+.quick-view {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+}

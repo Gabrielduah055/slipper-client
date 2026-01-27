@@ -1,0 +1,16 @@
+.filter-checkbox:checked {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuB3Yzja6lOl4Kpg_D80JiC6v5OeSYNAh9-GUPoI_lysjjy-F4RKOY0cH5u9znwkrJORjpjctZFYU_aKMOvzErH0pa8u_dNbfVW24cZnGmhgoQzpwjmBkT00RWWrYpeMsaaq5isGJjovrazA8WVG-qWQ7UpGt1K0SLrfsg8J6lJA_XSecDYTCxDDVacE0SWQzsBEN2iPjD4Otxn2SLiWDmi0g5sziBSw2fwaOpdOzBQK1ppFGkIipk58NrSKH1XqqBrnDZEclzFWlRBl);
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.product-card:hover .cart-btn {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.cart-btn {
+    transform: translateY(1rem);
+    opacity: 0;
+    transition: all 0.3s;
+}
