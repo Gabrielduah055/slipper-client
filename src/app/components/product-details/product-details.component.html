@@ -1,23 +1,37 @@
-<div class="max-w-[1280px] mx-auto px-6 lg:px-10 py-8">
+<div *ngIf="product" class="max-w-[1280px] mx-auto px-6 lg:px-10 py-8">
     <!-- Breadcrumbs -->
     <nav class="flex items-center gap-2 mb-8 text-sm font-medium">
         <a class="text-slate-500 hover:text-primary" routerLink="/">Home</a>
         <span class="material-symbols-outlined text-[16px] text-slate-400">chevron_right</span>
         <a class="text-slate-500 hover:text-primary" routerLink="/shop">Footwear</a>
         <span class="material-symbols-outlined text-[16px] text-slate-400">chevron_right</span>
-        <span class="text-slate-900 dark:text-slate-100">Hand-Woven Kente Slipper</span>
+        <span class="text-slate-900 dark:text-slate-100">{{ product.productName }}</span>
     </nav>
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-20">
         <!-- Product Gallery (6 cols) -->
-        <div class="lg:col-span-7 flex gap-4">
-            <div class="flex flex-col gap-4 w-24">
-                <div class="aspect-square rounded-lg bg-center bg-cover border-2 border-primary cursor-pointer" data-alt="thumbnail showing front view of kente slipper" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuA2x5SwOlC0H1KgAqT7B0MLtyQWPg2QQfOvn4azGBbpy9DRWegv6G2GMvuRaogqQ85FTeCnsaOsELNc-t8sNe5qN2CCH8AI_MQ4pgUod0fGz7PnwGdz-JRuiskJF4ALzDG2Qaih-YmjkMR8AY-4ftPFDqs3MMINhyTOd1OE5Iq1ivbYw0fidYgN3e2usQT71bxBBoaHw8ayTieNUYuDD6w8VR1xrXKMtLlSZyOTiOJ71-_dTmEt9vOPKu1pJhMUGhaAQ3GGPOnmoS7h');"></div>
-                <div class="aspect-square rounded-lg bg-center bg-cover border border-slate-200 cursor-pointer hover:border-primary transition-colors" data-alt="thumbnail showing side profile of kente slipper" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAAT6ae_wsFdQl-NAw-ksge9KFB6pMN-iLavCnfCc6QoaRQWv15ATDgm6u5pADlDXqrCsI0-3UQROZ3ZLlMsMmtN-JuZdHq-1EQKr9sY-BVacu8o-JCi-LHdg3bWMDOmt3bm1e23kRlvpcF3EITHVVmD9RO5FiwqJwOw4klB6EHAddic1IkIMt6JPZj0xlg9rJD8Zg3HFidMgQ9XXTBz1amxDou474WKzWNSZWwHvaj0kBTC8Itl9MG2DvBPYdyNGa_6TJn4MWlD95Z');"></div>
-                <div class="aspect-square rounded-lg bg-center bg-cover border border-slate-200 cursor-pointer hover:border-primary transition-colors" data-alt="thumbnail showing bottom sole detail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAcLMjV4oeYD4vPof4W2uED91tacT_594eoWjeFZKvXK4S0e7SHfiWxITsO0_Xmus3ZAqCz4NWqkwjmO3r7n_mJ4m8azEZNaR7oyuh0CyhL3Zo-xy60D93aQfmH7rTi6JO-wYCLSVZKYaqhqTnzcS-ztTI0k8E-JUPK6xgT_phEHJ0ygltomiXQ3klFwMUC__5FAi3KdrcraD203z2ShfrMW2q3n3_-6mbBP0ResNZXhryb0LoAH0yD6DJaRnUp4bi6fpUzU8Owo1bL');"></div>
-                <div class="aspect-square rounded-lg bg-center bg-cover border border-slate-200 cursor-pointer hover:border-primary transition-colors" data-alt="thumbnail showing close up of kente fabric weave" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC4tSyZdpvbmRik8frJiDqzy4lEd_0aPvYNKqwAc57jPjgqh-d90H83BuwAXHIpJQsTRCHACYC6THfpUria84iqMvcViVLn5oIBwgfpUop17YHFwDOyvb8CbpsZlunR4gfJ-yFKFwPv24TISJ35nLo0jGh9gMq9NHCeQszy6zu4AV9QLpK9BOhiokXZpk73Rnl8bes0iDT-Y3pG06_jc9YLDLcHgT3pv3apXdZt2wjoUcKcC4be5BhPvZj6q6RzInA6fccUmiHS2t8o');"></div>
+        <div class="lg:col-span-7 flex flex-col-reverse lg:flex-row gap-4">
+            <div class="flex lg:flex-col gap-4 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 w-full lg:w-24 shrink-0 no-scrollbar">
+                <!-- Main Image Thumbnail -->
+                <div 
+                    class="aspect-square rounded-lg bg-center bg-cover border-2 cursor-pointer shrink-0 w-20 lg:w-full transition-all duration-200"
+                    [class.border-primary]="mainImage === product.productImage"
+                    [class.border-slate-200]="mainImage !== product.productImage"
+                    (click)="changeMainImage(product.productImage)"
+                    [style.background-image]="'url(' + product.productImage + ')'">
+                </div>
+                <!-- Additional Thumbnails -->
+                <div *ngFor="let img of product.productThumbnailImages"
+                    class="aspect-square rounded-lg bg-center bg-cover border-2 cursor-pointer shrink-0 w-20 lg:w-full transition-all duration-200 hover:border-primary/50"
+                    [class.border-primary]="mainImage === img"
+                    [class.border-slate-200]="mainImage !== img"
+                    (click)="changeMainImage(img)"
+                    [style.background-image]="'url(' + img + ')'">
+                </div>
             </div>
             <div class="flex-1">
-                <div class="w-full aspect-[4/5] rounded-xl bg-center bg-cover bg-[#eef3f2]" data-alt="large main photo of vibrant kente slipper" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAFaNYoPyp5Bv64A0DLoj1W1lvdGEcWoZe8ajjFTFurHKR_9YUO46N6F2ApUo9cHvWI8LzCKPktRXpJ9OiqgeLZMn6ACA_PCwpLgMC7U8UwmA6jqWREQ6bx3M7xbWETw3F09bGWdt-VsC7FdRgXt_842ebQaCaE9EdwGt2mbj_WP6jU6iOK8Nu4l2wWyEeflRpEzB8Y43LPL9lKIS0or7i-qqTa9Y-G2H_56QTwDAYjp13QnFnmDy8nGfCAYWUiZo-LZo3aE8l7Fbyq');"></div>
+                <div class="w-full aspect-[4/5] rounded-xl bg-center bg-cover bg-slate-100 dark:bg-slate-800 transition-all duration-500 ease-in-out" 
+                     [style.background-image]="'url(' + mainImage + ')'">
+                </div>
             </div>
         </div>
         <!-- Product Purchase Details (5 cols) -->
@@ -27,54 +41,61 @@
                     <span class="material-symbols-outlined text-[14px] mr-1">verified</span>
                     HANDCRAFTED IN GHANA
                 </div>
-                <h1 class="text-4xl font-bold mb-2">Hand-Woven Kente Slipper</h1>
+                <h1 class="text-4xl font-bold mb-2 text-slate-900 dark:text-white">{{ product.productName }}</h1>
                 <div class="flex items-center gap-4 mb-4">
-                    <span class="text-2xl font-bold text-slate-900 dark:text-white">GH₵ 250.00</span>
-                    <span class="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium">In Stock</span>
+                    <span class="text-2xl font-bold text-slate-900 dark:text-white">GH₵ {{ product.productPrice }}</span>
+                    <span class="px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-xs font-medium" *ngIf="product.isActive">In Stock</span>
                 </div>
                 <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
-                    Authentic Ghanaian slippers featuring traditional hand-woven Kente cloth patterns. Each pair is meticulously crafted by local artisans using premium leather soles and heritage-rich cotton threads. Perfect for both casual elegance and traditional ceremonies.
+                    {{ product.productDescription }}
                 </p>
             </div>
             <hr class="border-slate-200 dark:border-slate-800"/>
             <!-- Size Selector -->
             <div>
                 <div class="flex items-center justify-between mb-3">
-                    <span class="text-sm font-semibold uppercase tracking-wider">Select Size (EU)</span>
+                    <span class="text-sm font-semibold uppercase tracking-wider text-slate-900 dark:text-slate-200">Select Size (EU)</span>
                     <button class="text-sm text-primary font-medium underline">Size Guide</button>
                 </div>
                 <div class="grid grid-cols-5 gap-2">
-                    <button class="py-3 border border-slate-200 dark:border-slate-700 rounded-lg font-medium hover:border-primary transition-all">38</button>
-                    <button class="py-3 border border-slate-200 dark:border-slate-700 rounded-lg font-medium hover:border-primary transition-all">39</button>
-                    <button class="py-3 border-2 border-primary bg-primary/5 rounded-lg font-bold text-primary">40</button>
-                    <button class="py-3 border border-slate-200 dark:border-slate-700 rounded-lg font-medium hover:border-primary transition-all">41</button>
-                    <button class="py-3 border border-slate-200 dark:border-slate-700 rounded-lg font-medium hover:border-primary transition-all">42</button>
-                    <button class="py-3 border border-slate-200 dark:border-slate-700 rounded-lg font-medium hover:border-primary transition-all">43</button>
-                    <button class="py-3 border border-slate-200 dark:border-slate-700 rounded-lg font-medium hover:border-primary transition-all">44</button>
-                    <button class="py-3 border border-slate-200 dark:border-slate-700 opacity-50 cursor-not-allowed rounded-lg font-medium">45</button>
+                    <button *ngFor="let size of availableSizes"
+                        class="py-3 rounded-lg font-medium transition-all duration-200"
+                        [class.border-2]="size === selectedSize"
+                        [class.border-primary]="size === selectedSize"
+                        [class.bg-primary-5]="size === selectedSize"
+                        [class.text-primary]="size === selectedSize"
+                        [class.border]="size !== selectedSize"
+                        [class.border-slate-200]="size !== selectedSize"
+                        [class.dark:border-slate-700]="size !== selectedSize"
+                        [class.opacity-50]="size !== product.productSize"
+                        [class.cursor-not-allowed]="size !== product.productSize"
+                        [class.hover:border-primary]="size === product.productSize && size !== selectedSize"
+                        [disabled]="size !== product.productSize">
+                        {{ size }}
+                    </button>
                 </div>
             </div>
             <!-- Quantity and Actions -->
             <div class="flex flex-col gap-4">
                 <div class="flex items-center gap-4">
                     <div class="flex items-center border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden h-12">
-                        <button class="px-4 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                        <button class="px-4 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-900 dark:text-white" (click)="decreaseQuantity()">
                             <span class="material-symbols-outlined text-[20px]">remove</span>
                         </button>
-                        <span class="w-12 text-center font-bold">1</span>
-                        <button class="px-4 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                        <span class="w-12 text-center font-bold text-slate-900 dark:text-white">{{ quantity }}</span>
+                        <button class="px-4 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-900 dark:text-white" (click)="increaseQuantity()">
                             <span class="material-symbols-outlined text-[20px]">add</span>
                         </button>
                     </div>
-                    <button class="flex-1 bg-primary text-white font-bold h-12 rounded-lg flex items-center justify-center gap-2 hover:opacity-90 transition-opacity" routerLink="/cart">
+                    <button class="flex-1 bg-primary text-white font-bold h-12 rounded-lg flex items-center justify-center gap-2 hover:opacity-90 transition-opacity shadow-lg shadow-primary/20" (click)="addToCart()">
                         <span class="material-symbols-outlined">shopping_cart</span>
                         Add to Cart
                     </button>
                 </div>
-                <button class="w-full h-12 border-2 border-slate-900 dark:border-white text-slate-900 dark:text-white font-bold rounded-lg hover:bg-slate-900 hover:text-white dark:hover:bg-white dark:hover:text-slate-900 transition-all" routerLink="/cart">
+                <button class="w-full h-12 border-2 border-slate-900 dark:border-white text-slate-900 dark:text-white font-bold rounded-lg hover:bg-slate-900 hover:text-white dark:hover:bg-white dark:hover:text-slate-900 transition-all" (click)="buyItNow()">
                     Buy It Now
                 </button>
-                <button class="w-full h-12 flex items-center justify-center gap-3 bg-[#25D366] text-white font-bold rounded-lg hover:opacity-90 transition-opacity">
+                <button class="w-full h-12 flex items-center justify-center gap-3 bg-[#25D366] text-white font-bold rounded-lg hover:opacity-90 transition-opacity shadow-lg shadow-[#25D366]/20">
                     <svg class="size-5 fill-current" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"></path></svg>
                     Inquire via WhatsApp
                 </button>
@@ -83,11 +104,11 @@
             <div class="mt-4 border-t border-slate-200 dark:border-slate-800">
                 <details class="group py-4 border-b border-slate-200 dark:border-slate-800" open="">
                     <summary class="flex items-center justify-between cursor-pointer list-none">
-                        <span class="font-bold flex items-center gap-2">
+                        <span class="font-bold flex items-center gap-2 text-slate-900 dark:text-white">
                             <span class="material-symbols-outlined text-primary">local_shipping</span>
                             Delivery Information
                         </span>
-                        <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+                        <span class="material-symbols-outlined group-open:rotate-180 transition-transform text-slate-500">expand_more</span>
                     </summary>
                     <div class="pt-3 text-sm text-slate-600 dark:text-slate-400 space-y-2">
                         <p>• Greater Accra: Same day or next day delivery.</p>
@@ -97,11 +118,11 @@
                 </details>
                 <details class="group py-4 border-b border-slate-200 dark:border-slate-800">
                     <summary class="flex items-center justify-between cursor-pointer list-none">
-                        <span class="font-bold flex items-center gap-2">
+                        <span class="font-bold flex items-center gap-2 text-slate-900 dark:text-white">
                             <span class="material-symbols-outlined text-primary">assignment_return</span>
                             Easy Returns
                         </span>
-                        <span class="material-symbols-outlined group-open:rotate-180 transition-transform">expand_more</span>
+                        <span class="material-symbols-outlined group-open:rotate-180 transition-transform text-slate-500">expand_more</span>
                     </summary>
                     <div class="pt-3 text-sm text-slate-600 dark:text-slate-400">
                         <p>We offer a 7-day easy return policy for unworn items in their original packaging. Simply contact us via WhatsApp to initiate a return or size exchange.</p>
@@ -111,54 +132,28 @@
         </div>
     </div>
     <!-- Related Products -->
-    <div class="border-t border-slate-200 dark:border-slate-800 pt-16">
+    <div *ngIf="relatedProducts.length > 0" class="border-t border-slate-200 dark:border-slate-800 pt-16">
         <div class="flex items-center justify-between mb-8">
-            <h2 class="text-xl md:text-2xl font-bold">You Might Also Like</h2>
-            <a class="text-primary font-bold hover:underline flex items-center gap-1 cursor-pointer" routerLink="/shop">
+            <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">You Might Also Like</h2>
+            <a class="text-primary font-bold hover:underline flex items-center gap-1 cursor-pointer" routerLink="/shop" [queryParams]="{ category: product.category }">
                 View Collection <span class="material-symbols-outlined">arrow_right_alt</span>
             </a>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <!-- Related Item 1 -->
-            <div class="group">
-                <div class="aspect-square rounded-xl bg-center bg-cover mb-4 relative overflow-hidden" data-alt="vibrant blue kente patterned slipper" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBwL7OFKmqItcwRRlycUiqFZL2xIpZqNFzbwkui06R647rFhdapr3HwOJD8Zm3GAHaMNaBRNzmJVl0Dt6sE-5Yr5ZdkoprgV6BJioxbAc4KfE1h0xEgot4XODP3-L9DKg6cd8POPAfh3YeCuvhbY5Ew3ATDgiRutk_w-2fduiICUQhVLnREDgaKjNffX31ZipiS4_DigEVvevFCxfRZ7L9ES3bWjCuQ6813SfG2Af1JAX29gTI5-aU9V8erxZ5w_xzmubccD34M7Lvh');">
-                    <button class="absolute bottom-4 right-4 bg-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 transition-transform" routerLink="/cart">
+            <div *ngFor="let relProduct of relatedProducts" class="group cursor-pointer" [routerLink]="['/product-details', relProduct._id]">
+                <div class="aspect-square rounded-xl bg-center bg-cover mb-4 relative overflow-hidden bg-slate-100 dark:bg-slate-800" [style.background-image]="'url(' + relProduct.productImage + ')'">
+                    <button class="absolute bottom-4 right-4 bg-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 transition-transform" (click)="$event.stopPropagation()" routerLink="/cart">
                         <span class="material-symbols-outlined text-slate-900">add_shopping_cart</span>
                     </button>
                 </div>
-                <h3 class="text-sm md:text-base font-bold text-slate-900 dark:text-slate-100 group-hover:text-primary transition-colors cursor-pointer" routerLink="/product-details">Royal Blue Heritage Slipper</h3>
-                <p class="text-sm md:text-base text-slate-600 dark:text-slate-400 font-medium">GH₵ 240.00</p>
-            </div>
-            <!-- Related Item 2 -->
-            <div class="group">
-                <div class="aspect-square rounded-xl bg-center bg-cover mb-4 relative overflow-hidden" data-alt="earthy brown leather sandal with kente strap" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuApGYQghnMyky7befZWF-vuMXDYj5ZAHGOwP6-XM7YsLWsPTtHVA1kGxYsgAWpazFWikXb9LYBWoDn9snyWDfspPhnat1jen3VrH67Fm5zyt6t_kw-pSoOPwf3BoqLuNq-ZPVnoSj8i4nxvThC72Js0_GANjXllPW7u8GZQVbvRAyESU9iPrMlEgGvkpZMWZysW66OG68HSjCeYogdCOjkcq4mUilsz2Kl951Lbc46hxtrXxRN3Y3GIRzoZpCNPPnFJdSVjqB9j8Btc');">
-                    <button class="absolute bottom-4 right-4 bg-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 transition-transform" routerLink="/cart">
-                        <span class="material-symbols-outlined text-slate-900">add_shopping_cart</span>
-                    </button>
-                </div>
-                <h3 class="text-sm md:text-base font-bold text-slate-900 dark:text-slate-100 group-hover:text-primary transition-colors cursor-pointer" routerLink="/product-details">Earth Tone Artisan Sandal</h3>
-                <p class="text-sm md:text-base text-slate-600 dark:text-slate-400 font-medium">GH₵ 220.00</p>
-            </div>
-            <!-- Related Item 3 -->
-            <div class="group">
-                <div class="aspect-square rounded-xl bg-center bg-cover mb-4 relative overflow-hidden" data-alt="modern monochrome kente fabric slipper" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCRd6-Sl3vi592-c9qcIZzi5ReJjd-cHAKp8yVxg3iIGLYXLuZOWroAFmewdd1l5NFNbNx4z_OYRhcE7NfhTPAW9xOO4pAPyDYWRcMdJGFeW2PKJ8S0LlfGzmxwNe5iUyNqazuK34hpTq4KClCfgF02dy2mTVf9EcMZwExeIqsCU2MP_N62eaqfh044RCHi0wV4HXcqxGfAIwsfwVoH0XuLuEA-joNf-mTguAPFPFjnpvo-22kz8KN-sHPCt0yk2aaw_5OyPFIRVNWI');">
-                    <button class="absolute bottom-4 right-4 bg-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 transition-transform" routerLink="/cart">
-                        <span class="material-symbols-outlined text-slate-900">add_shopping_cart</span>
-                    </button>
-                </div>
-                <h3 class="text-sm md:text-base font-bold text-slate-900 dark:text-slate-100 group-hover:text-primary transition-colors cursor-pointer" routerLink="/product-details">Monochrome Kente Slip-on</h3>
-                <p class="text-sm md:text-base text-slate-600 dark:text-slate-400 font-medium">GH₵ 265.00</p>
-            </div>
-            <!-- Related Item 4 -->
-            <div class="group">
-                <div class="aspect-square rounded-xl bg-center bg-cover mb-4 relative overflow-hidden" data-alt="traditional gold and green kente slipper" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCTBZ_zp27kTUYS-NiTERMpW3g_vh8SDSjX_Ck3DCyFbebnddlDsgVonUvzCHBodFLsxeoFtBFuSTqmjDeyry7gr4KlEwJBT2UW9vhsNVmPYffxFkf0_kfQa-MEgbJJFEfZ5ycU-LL8mzMNYKn7lm2ACgRnsFHrXEcA1rC0DfeG7dNzIsm8uDqiJOup5VR0wmM5Z-I2-iN5GHw0Wp7WcIc7_sC-c3WkgOxMPq9cVsDmx7mvzRPUVPPXVRWT7OrNDDWPY-XMWD97ogHK');">
-                    <button class="absolute bottom-4 right-4 bg-white p-2 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 transition-transform" routerLink="/cart">
-                        <span class="material-symbols-outlined text-slate-900">add_shopping_cart</span>
-                    </button>
-                </div>
-                <h3 class="text-sm md:text-base font-bold text-slate-900 dark:text-slate-100 group-hover:text-primary transition-colors cursor-pointer" routerLink="/product-details">Golden Harvest Slipper</h3>
-                <p class="text-sm md:text-base text-slate-600 dark:text-slate-400 font-medium">GH₵ 255.00</p>
+                <h3 class="text-sm md:text-base font-bold text-slate-900 dark:text-slate-100 group-hover:text-primary transition-colors cursor-pointer">{{ relProduct.productName }}</h3>
+                <p class="text-sm md:text-base text-slate-600 dark:text-slate-400 font-medium">GH₵ {{ relProduct.productPrice }}</p>
             </div>
         </div>
     </div>
+</div>
+<!-- Loading State -->
+<div *ngIf="!product" class="flex flex-col items-center justify-center min-h-[50vh] text-slate-500">
+    <div class="w-12 h-12 border-4 border-slate-200 border-t-primary rounded-full animate-spin mb-4"></div>
+    <p>Loading product details...</p>
 </div>
