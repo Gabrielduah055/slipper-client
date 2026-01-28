@@ -39,37 +39,19 @@
       <a class="text-primary font-bold hover:underline flex items-center gap-1 cursor-pointer" routerLink="/categories">View All <span class="material-symbols-outlined">arrow_right_alt</span></a>
     </div>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-      <div class="group cursor-pointer relative rounded-2xl overflow-hidden aspect-square" routerLink="/shop">
+      <div *ngFor="let category of categories" class="group cursor-pointer relative rounded-2xl overflow-hidden aspect-square" [routerLink]="['/shop']" [queryParams]="{ category: category }">
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
-        <div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Traditional men's slippers in premium brown leather" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCAZ3nXHCSLR62VTnHfF3ZFN_m-RTfIW_0JfXx46GKMkVI86W7YH-klEGSxeEN7fgoQJsUvw2nVLgHW8zYmyKgeL6780-4OXbk8uXvwy762CnHb0PbRYNUwAfjmkg0UEs3d_Q2s0IkOMDL9nVLVekz9vJi0HzQgdZvtBaWpV70nIvV0YJW03Y-IrgOQxwe4lnP56SuzxFwe11n4AkvEVhQqm6LzV5H01Kmg9iLaWRKEL-RP1Q4W3caE5n5N-MHLPF0CuKj4Dkl7aEwF');"></div>
+        <div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" [style.background-image]="'url(' + getDetails(category).image + ')'"></div>
         <div class="absolute bottom-6 left-6 z-20">
-          <p class="text-white text-base md:text-xl font-bold">Men's Collection</p>
-          <p class="text-slate-300 text-xs md:text-sm">48 Styles</p>
+          <p class="text-white text-base md:text-xl font-bold">{{ category }}</p>
+          <p class="text-slate-300 text-xs md:text-sm">Explore Collection</p>
         </div>
       </div>
-      <div class="group cursor-pointer relative rounded-2xl overflow-hidden aspect-square" routerLink="/shop">
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
-        <div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Elegant women's flat sandals with colorful beadwork" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBAeYpITv94WwzJ4_FAlQlGo6AR7TVQxjEIBHPZtNovhXgzzofgyOaIl_jrqO8yc1fhjuTJSOGxbYJGzRvB3uZnbmBH1c0lbaEBzOLH-HKDveWFMhS9Q-H4-JNvQlYfoN66_AXQtzakApOo_8vE5C2a0TtXZV2DtuRMPgBTp8XlWSAHbTjeoxSuFlvMXSfwHWatkNIN9I1IvUimlAPrPtJ4ULWDRxJJSyQtLUoCPPPxsiuW1hB_jsGvs83fBlc1ayKfD99HXWedxr5O');"></div>
-        <div class="absolute bottom-6 left-6 z-20">
-          <p class="text-white text-base md:text-xl font-bold">Women's Collection</p>
-          <p class="text-slate-300 text-xs md:text-sm">62 Styles</p>
-        </div>
-      </div>
-      <div class="group cursor-pointer relative rounded-2xl overflow-hidden aspect-square" routerLink="/shop">
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
-        <div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Small colorful slippers for children" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAzOAzR4g5epOsPG4fXT5XXxHdZqD4YSrQyiCMl-n_rrahckA5Y-8TMM8-1TGdnG0w6tzOmWWgJ_htIMwmTonxV8sUuYe-5n-3kDRL7ylC_XzbmYeGUuN1TdpZm7mbsXOjMrTIAEW3FXlJLOTgtBjAjoyDeiP444qfmGBoJibTpbjaM8HDc7KFiRbgSXkajVNclkwHvwvRPGge6xkm26OmnYHVm-x7jCjLr36jin4Ng-JJffh-66bkijMikD985alrRMVCiuEXFdFsI');"></div>
-        <div class="absolute bottom-6 left-6 z-20">
-          <p class="text-white text-base md:text-xl font-bold">Kids' Styles</p>
-          <p class="text-slate-300 text-xs md:text-sm">24 Styles</p>
-        </div>
-      </div>
-      <div class="group cursor-pointer relative rounded-2xl overflow-hidden aspect-square" routerLink="/shop">
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10"></div>
-        <div class="w-full h-full bg-cover bg-center transition-transform duration-500 group-hover:scale-110" data-alt="Limited edition festive sandals with gold accents" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCsHyp3uFUVYAcH-dahMCJb52rkIjLFg0lTtQuueVfO-gxNu0qDpRESZFIZXy3DFGG8LkK9s9LfOCcfaSPQF9MIcJivK8KBmBZn5myCgxwFEax-OaLNI_MoI9ZdJGc_FvTQgebbQfnVg6TgxgzPUdwE6xC5vZCno0KBswGhga0SIyuiHLLvfqbwB_gTVV5G8cJE9GwRCWnMgG8RawEW-QP_jNZfIYCVdTGHC7E5pwnY-KyEYWALI-mGY04MLhn4ZU_3nvYjvv9pal56');"></div>
-        <div class="absolute bottom-6 left-6 z-20">
-          <p class="text-white text-base md:text-xl font-bold">Seasonal Specials</p>
-          <p class="text-slate-300 text-xs md:text-sm">New Drops</p>
-        </div>
+      
+      <!-- Loading State -->
+      <div *ngIf="categories.length === 0" class="col-span-full flex flex-col items-center justify-center py-10 text-slate-500">
+           <div class="w-8 h-8 border-4 border-slate-200 border-t-primary rounded-full animate-spin mb-2"></div>
+           <p class="text-sm">Loading...</p>
       </div>
     </div>
 </section>
