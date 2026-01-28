@@ -9,7 +9,7 @@ export const routes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'categories', component: CategoryComponent },
     { path: 'shop', component: AllProductsComponent },
-    { path: 'product-details', component: ProductDetailsComponent },
+    { path: 'product-details/:id', component: ProductDetailsComponent }, // Added :id parameter
     { path: 'cart', component: CartComponent },
     { path: '**', redirectTo: '' }
 ];
