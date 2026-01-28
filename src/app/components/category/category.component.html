@@ -9,86 +9,26 @@
 </section>
 <section class="max-w-7xl mx-auto px-6 py-12">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div class="category-card group cursor-pointer relative bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500" routerLink="/shop">
+        
+        <div *ngFor="let category of categories" class="category-card group cursor-pointer relative bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500" [routerLink]="['/shop']" [queryParams]="{ category: category }">
             <div class="aspect-[4/5] overflow-hidden">
-                <img alt="Men's Collection" class="w-full h-full object-cover transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAZ3nXHCSLR62VTnHfF3ZFN_m-RTfIW_0JfXx46GKMkVI86W7YH-klEGSxeEN7fgoQJsUvw2nVLgHW8zYmyKgeL6780-4OXbk8uXvwy762CnHb0PbRYNUwAfjmkg0UEs3d_Q2s0IkOMDL9nVLVekz9vJi0HzQgdZvtBaWpV70nIvV0YJW03Y-IrgOQxwe4lnP56SuzxFwe11n4AkvEVhQqm6LzV5H01Kmg9iLaWRKEL-RP1Q4W3caE5n5N-MHLPF0CuKj4Dkl7aEwF"/>
+                <img [alt]="category" class="w-full h-full object-cover transition-transform duration-700" [src]="getDetails(category).image"/>
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
             </div>
             <div class="absolute inset-0 p-8 flex flex-col justify-end">
-                <h3 class="text-xl md:text-3xl font-bold text-white mb-2">Men's Collection</h3>
-                <p class="text-slate-300 text-sm md:text-base mb-6 line-clamp-2">Authentic leather slides and traditional designs for the modern gentleman.</p>
+                <h3 class="text-xl md:text-3xl font-bold text-white mb-2">{{ category }}</h3>
+                <p class="text-slate-300 text-sm md:text-base mb-6 line-clamp-2">{{ getDetails(category).description }}</p>
                 <div class="cta-button w-fit px-6 py-3 rounded-xl border border-primary/50 text-primary font-bold transition-all flex items-center gap-2 group-hover:text-white">
                     Shop Now <span class="material-symbols-outlined text-sm">arrow_forward</span>
                 </div>
             </div>
         </div>
-        <div class="category-card group cursor-pointer relative bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500" routerLink="/shop">
-            <div class="aspect-[4/5] overflow-hidden">
-                <img alt="Women's Collection" class="w-full h-full object-cover transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAeYpITv94WwzJ4_FAlQlGo6AR7TVQxjEIBHPZtNovhXgzzofgyOaIl_jrqO8yc1fhjuTJSOGxbYJGzRvB3uZnbmBH1c0lbaEBzOLH-HKDveWFMhS9Q-H4-JNvQlYfoN66_AXQtzakApOo_8vE5C2a0TtXZV2DtuRMPgBTp8XlWSAHbTjeoxSuFlvMXSfwHWatkNIN9I1IvUimlAPrPtJ4ULWDRxJJSyQtLUoCPPPxsiuW1hB_jsGvs83fBlc1ayKfD99HXWedxr5O"/>
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
-            </div>
-            <div class="absolute inset-0 p-8 flex flex-col justify-end">
-                <h3 class="text-xl md:text-3xl font-bold text-white mb-2">Women's Collection</h3>
-                <p class="text-slate-300 text-sm md:text-base mb-6 line-clamp-2">Elegant beadwork and premium comfort combined with Ghanaian heritage.</p>
-                <div class="cta-button w-fit px-6 py-3 rounded-xl border border-primary/50 text-primary font-bold transition-all flex items-center gap-2 group-hover:text-white">
-                    Shop Now <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                </div>
-            </div>
+
+        <!-- Loading State -->
+        <div *ngIf="categories.length === 0" class="col-span-full flex flex-col items-center justify-center py-20 text-slate-500">
+             <div class="w-12 h-12 border-4 border-slate-200 border-t-primary rounded-full animate-spin mb-4"></div>
+             <p>Loading categories...</p>
         </div>
-        <div class="category-card group cursor-pointer relative bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500" routerLink="/shop">
-            <div class="aspect-[4/5] overflow-hidden">
-                <img alt="Kids' Collection" class="w-full h-full object-cover transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzOAzR4g5epOsPG4fXT5XXxHdZqD4YSrQyiCMl-n_rrahckA5Y-8TMM8-1TGdnG0w6tzOmWWgJ_htIMwmTonxV8sUuYe-5n-3kDRL7ylC_XzbmYeGUuN1TdpZm7mbsXOjMrTIAEW3FXlJLOTgtBjAjoyDeiP444qfmGBoJibTpbjaM8HDc7KFiRbgSXkajVNclkwHvwvRPGge6xkm26OmnYHVm-x7jCjLr36jin4Ng-JJffh-66bkijMikD985alrRMVCiuEXFdFsI"/>
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
-            </div>
-            <div class="absolute inset-0 p-8 flex flex-col justify-end">
-                <h3 class="text-xl md:text-3xl font-bold text-white mb-2">Kids' Styles</h3>
-                <p class="text-slate-300 text-sm md:text-base mb-6 line-clamp-2">Durable and colorful slippers designed for the next generation.</p>
-                <div class="cta-button w-fit px-6 py-3 rounded-xl border border-primary/50 text-primary font-bold transition-all flex items-center gap-2 group-hover:text-white">
-                    Shop Now <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                </div>
-            </div>
-        </div>
-        <div class="category-card group cursor-pointer relative bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500" routerLink="/shop">
-            <div class="aspect-[4/5] overflow-hidden">
-                <img alt="Seasonal Specials" class="w-full h-full object-cover transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsHyp3uFUVYAcH-dahMCJb52rkIjLFg0lTtQuueVfO-gxNu0qDpRESZFIZXy3DFGG8LkK9s9LfOCcfaSPQF9MIcJivK8KBmBZn5myCgxwFEax-OaLNI_MoI9ZdJGc_FvTQgebbQfnVg6TgxgzPUdwE6xC5vZCno0KBswGhga0SIyuiHLLvfqbwB_gTVV5G8cJE9GwRCWnMgG8RawEW-QP_jNZfIYCVdTGHC7E5pwnY-KyEYWALI-mGY04MLhn4ZU_3nvYjvv9pal56"/>
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
-            </div>
-            <div class="absolute top-6 right-6">
-                <span class="bg-primary text-white font-black px-4 py-1.5 rounded-full text-xs uppercase tracking-widest">Limited</span>
-            </div>
-            <div class="absolute inset-0 p-8 flex flex-col justify-end">
-                <h3 class="text-xl md:text-3xl font-bold text-white mb-2">Seasonal Specials</h3>
-                <p class="text-slate-300 text-sm md:text-base mb-6 line-clamp-2">Festive editions and exclusive holiday drops you can't miss.</p>
-                <div class="cta-button w-fit px-6 py-3 rounded-xl border border-primary/50 text-primary font-bold transition-all flex items-center gap-2 group-hover:text-white">
-                    Shop Now <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                </div>
-            </div>
-        </div>
-        <div class="category-card group cursor-pointer relative bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500" routerLink="/shop">
-            <div class="aspect-[4/5] overflow-hidden">
-                <img alt="Leather Collection" class="w-full h-full object-cover transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfALm0-CWPtScSzTWahKixq42HRThqGdmOd7zeeUCC7hKegAfx-E8xJngFiocrj7FxXTILImZRm-CQ65LCojIWzLxnfoSD4usrYGE59fxD0fUwoBPjSQDcgngzCWtlmttUK6oEp7OrKLv5UlJkGi8XVF0IrZl87OVOhDhU4G85Jr0t4VtSjSIzVDP9oRbyHCX0rOgZMuajxIvPULNs2pgHvwAFIIQKJu8hJaGhEPSoaWA36fIsD_sHB2ej9eEfVsKlt9yIkxrfB9pi"/>
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
-            </div>
-            <div class="absolute inset-0 p-8 flex flex-col justify-end">
-                <h3 class="text-xl md:text-3xl font-bold text-white mb-2">Leather Collection</h3>
-                <p class="text-slate-300 text-sm md:text-base mb-6 line-clamp-2">Premium grade calf leather, hand-dyed and stitched by master craftsmen.</p>
-                <div class="cta-button w-fit px-6 py-3 rounded-xl border border-primary/50 text-primary font-bold transition-all flex items-center gap-2 group-hover:text-white">
-                    Shop Now <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                </div>
-            </div>
-        </div>
-        <div class="category-card group cursor-pointer relative bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500" routerLink="/shop">
-            <div class="aspect-[4/5] overflow-hidden">
-                <img alt="Custom Orders" class="w-full h-full object-cover transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYtG47v9DTBESFFc3x0yPnJ3XCBA9QrAKr23WsfIQlz4vWCTpmmTYhZg35fkak5IcUykUK0hlpkpzYJs7VMv6qux54zrho2tLiPYRm5k8vINRDnb69bg-FEcUFwnwDwrRub2XUjgjfYMAMDVkUaF2KUNwMF2VOSGeqIh3H4g5FV_PQkmkb-JhuIp41FjkbpE8ri0mA5Il3MzpdKEoiot5_vTayu4uamS_qX7OCit0fNaivtVk28ToAWT8hNZlfKamG2OrbarH9Ajz5"/>
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent"></div>
-            </div>
-            <div class="absolute inset-0 p-8 flex flex-col justify-end">
-                <h3 class="text-xl md:text-3xl font-bold text-white mb-2">Custom Orders</h3>
-                <p class="text-slate-300 text-sm md:text-base mb-6 line-clamp-2">Your vision, our hands. Create your own unique pair with custom motifs.</p>
-                <div class="cta-button w-fit px-6 py-3 rounded-xl border border-primary/50 text-primary font-bold transition-all flex items-center gap-2 group-hover:text-white">
-                    Shop Now <span class="material-symbols-outlined text-sm">arrow_forward</span>
-                </div>
-            </div>
-        </div>
+
     </div>
 </section>

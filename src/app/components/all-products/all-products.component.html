@@ -7,9 +7,9 @@
                     <span class="material-symbols-outlined text-[10px]">chevron_right</span>
                     <a class="hover:text-primary" routerLink="/categories">Collections</a>
                     <span class="material-symbols-outlined text-[10px]">chevron_right</span>
-                    <span class="text-slate-900 dark:text-white">All Slippers</span>
+                    <span class="text-slate-900 dark:text-white">{{ selectedCategory || 'All Slippers' }}</span>
                 </nav>
-                <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white">All Slippers</h2>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white">{{ selectedCategory || 'All Slippers' }}</h2>
                 <p class="text-sm md:text-base text-slate-600 dark:text-slate-400 max-w-xl">
                     Discover our full range of masterfully handcrafted slippers, combining traditional Ghanaian artistry with contemporary comfort.
                 </p>
@@ -20,7 +20,6 @@
                         <option>Sort by: Newest First</option>
                         <option>Price: Low to High</option>
                         <option>Price: High to Low</option>
-                        <option>Customer Rating</option>
                     </select>
                     <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">expand_more</span>
                 </div>
@@ -34,25 +33,22 @@
             <div>
                 <h4 class="text-sm font-bold uppercase tracking-wider mb-4 border-b border-slate-200 dark:border-slate-800 pb-2">Category</h4>
                 <div class="space-y-2">
-                    <label class="flex items-center gap-3 cursor-pointer group">
-                        <input checked="" class="filter-checkbox w-5 h-5 rounded border-slate-300 dark:border-slate-700 text-primary focus:ring-primary/50 transition-all" type="checkbox"/>
-                        <span class="text-sm text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Men's (42)</span>
-                    </label>
-                    <label class="flex items-center gap-3 cursor-pointer group">
-                        <input class="filter-checkbox w-5 h-5 rounded border-slate-300 dark:border-slate-700 text-primary focus:ring-primary/50 transition-all" type="checkbox"/>
-                        <span class="text-sm text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Women's (38)</span>
-                    </label>
-                    <label class="flex items-center gap-3 cursor-pointer group">
-                        <input class="filter-checkbox w-5 h-5 rounded border-slate-300 dark:border-slate-700 text-primary focus:ring-primary/50 transition-all" type="checkbox"/>
-                        <span class="text-sm text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Kids (15)</span>
-                    </label>
-                    <label class="flex items-center gap-3 cursor-pointer group">
-                        <input class="filter-checkbox w-5 h-5 rounded border-slate-300 dark:border-slate-700 text-primary focus:ring-primary/50 transition-all" type="checkbox"/>
-                        <span class="text-sm text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">Custom Designs (12)</span>
-                    </label>
+                    <div *ngFor="let cat of categories" class="flex items-center gap-3 cursor-pointer group">
+                        <input 
+                            [checked]="selectedCategory === cat" 
+                            (change)="toggleCategory(cat, $event)"
+                            class="filter-checkbox w-5 h-5 rounded border-slate-300 dark:border-slate-700 text-primary focus:ring-primary/50 transition-all" 
+                            type="checkbox"
+                            [id]="'cat-'+cat"
+                        />
+                        <label [for]="'cat-'+cat" class="text-sm text-slate-600 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors cursor-pointer">
+                            {{ cat }} ({{ getCategoryCount(cat) }})
+                        </label>
+                    </div>
                 </div>
             </div>
-            <div>
+            <!-- Additional filters hidden for brevity/focus on functionality, or keep static placeholders if needed. Keeping static size/color for UI completeness as they weren't dynamic in request -->
+             <div>
                 <h4 class="text-sm font-bold uppercase tracking-wider mb-4 border-b border-slate-200 dark:border-slate-800 pb-2">Size</h4>
                 <div class="grid grid-cols-4 gap-2">
                     <button class="h-10 text-xs font-bold border border-slate-200 dark:border-slate-800 rounded-lg hover:border-primary hover:text-primary transition-all">38</button>
@@ -62,240 +58,63 @@
                     <button class="h-10 text-xs font-bold border border-slate-200 dark:border-slate-800 rounded-lg hover:border-primary hover:text-primary transition-all">45</button>
                 </div>
             </div>
-            <div>
-                <h4 class="text-sm font-bold uppercase tracking-wider mb-4 border-b border-slate-200 dark:border-slate-800 pb-2">Color</h4>
-                <div class="flex flex-wrap gap-3">
-                    <button class="h-8 w-8 rounded-full bg-slate-900 ring-2 ring-offset-2 ring-primary ring-offset-background-light dark:ring-offset-background-dark" title="Black"></button>
-                    <button class="h-8 w-8 rounded-full bg-amber-800" title="Brown"></button>
-                    <button class="h-8 w-8 rounded-full bg-red-800" title="Deep Red"></button>
-                    <button class="h-8 w-8 rounded-full bg-[#13ecec]" title="Teal"></button>
-                    <button class="h-8 w-8 rounded-full bg-slate-200" title="Cream"></button>
-                </div>
-            </div>
-            <div>
-                <h4 class="text-sm font-bold uppercase tracking-wider mb-4 border-b border-slate-200 dark:border-slate-800 pb-2">Price Range (GHS)</h4>
-                <div class="space-y-4">
-                    <input class="w-full accent-primary h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer" max="1500" min="100" type="range"/>
-                    <div class="flex items-center justify-between text-xs font-bold text-slate-500">
-                        <span>GHS 100</span>
-                        <span>GHS 1500+</span>
-                    </div>
-                </div>
-            </div>
-            <button class="w-full py-3 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white text-sm font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+            
+            <button class="w-full py-3 bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white text-sm font-bold rounded-xl hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" (click)="selectedCategory = null; filterProducts()">
                 Reset All Filters
             </button>
         </aside>
         <div class="flex-1">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <div class="product-card group relative flex flex-col bg-white dark:bg-slate-900/50 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
-                    <div class="relative aspect-square overflow-hidden bg-slate-50 dark:bg-slate-800">
-                        <img alt="Classic Leather Slide" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAZ3nXHCSLR62VTnHfF3ZFN_m-RTfIW_0JfXx46GKMkVI86W7YH-klEGSxeEN7fgoQJsUvw2nVLgHW8zYmyKgeL6780-4OXbk8uXvwy762CnHb0PbRYNUwAfjmkg0UEs3d_Q2s0IkOMDL9nVLVekz9vJi0HzQgdZvtBaWpV70nIvV0YJW03Y-IrgOQxwe4lnP56SuzxFwe11n4AkvEVhQqm6LzV5H01Kmg9iLaWRKEL-RP1Q4W3caE5n5N-MHLPF0CuKj4Dkl7aEwF"/>
-                        <div class="absolute inset-x-0 bottom-0 p-3 md:p-4">
-                            <button class="cart-btn w-full bg-primary/95 backdrop-blur-sm hover:bg-primary text-white font-bold py-2.5 md:py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg hover:shadow-primary/30 transition-all active:scale-95" routerLink="/cart">
-                                <span class="material-symbols-outlined text-lg md:text-xl">shopping_bag</span>
-                                <span class="text-sm md:text-base">Add to Cart</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-4 flex flex-col flex-grow">
-                        <div class="flex justify-between items-start mb-1" routerLink="/product-details" class="cursor-pointer">
-                            <h3 class="text-sm md:text-base font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors line-clamp-1">Classic Leather Slide</h3>
-                            <button class="text-slate-300 hover:text-red-500 transition-colors">
-                                <span class="material-symbols-outlined text-[20px]">favorite</span>
-                            </button>
-                        </div>
-                        <div class="flex items-center gap-1 mb-3">
-                            <div class="flex text-amber-400">
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm">star_half</span>
-                            </div>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">(24)</span>
-                        </div>
-                        <div class="mt-auto">
-                            <span class="text-base md:text-lg font-extrabold text-slate-900 dark:text-white">GHS 450.00</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card group relative flex flex-col bg-white dark:bg-slate-900/50 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
-                    <div class="relative aspect-square overflow-hidden bg-slate-50 dark:bg-slate-800">
-                        <img alt="Beaded Queen Slide" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAeYpITv94WwzJ4_FAlQlGo6AR7TVQxjEIBHPZtNovhXgzzofgyOaIl_jrqO8yc1fhjuTJSOGxbYJGzRvB3uZnbmBH1c0lbaEBzOLH-HKDveWFMhS9Q-H4-JNvQlYfoN66_AXQtzakApOo_8vE5C2a0TtXZV2DtuRMPgBTp8XlWSAHbTjeoxSuFlvMXSfwHWatkNIN9I1IvUimlAPrPtJ4ULWDRxJJSyQtLUoCPPPxsiuW1hB_jsGvs83fBlc1ayKfD99HXWedxr5O"/>
-                        <div class="absolute inset-x-0 bottom-0 p-3 md:p-4">
-                            <button class="cart-btn w-full bg-primary/95 backdrop-blur-sm hover:bg-primary text-white font-bold py-2.5 md:py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg hover:shadow-primary/30 transition-all active:scale-95" routerLink="/cart">
-                                <span class="material-symbols-outlined text-lg md:text-xl">shopping_bag</span>
-                                <span class="text-sm md:text-base">Add to Cart</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-4 flex flex-col flex-grow">
-                        <div class="flex justify-between items-start mb-1" routerLink="/product-details" class="cursor-pointer">
-                            <h3 class="text-sm md:text-base font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors line-clamp-1">Beaded Queen Slide</h3>
-                            <button class="text-slate-300 hover:text-red-500 transition-colors">
-                                <span class="material-symbols-outlined text-[20px]">favorite</span>
-                            </button>
-                        </div>
-                        <div class="flex items-center gap-1 mb-3">
-                            <div class="flex text-amber-400">
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                            </div>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">(48)</span>
-                        </div>
-                        <div class="mt-auto">
-                            <span class="text-base md:text-lg font-extrabold text-slate-900 dark:text-white">GHS 620.00</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card group relative flex flex-col bg-white dark:bg-slate-900/50 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
-                    <div class="relative aspect-square overflow-hidden bg-slate-50 dark:bg-slate-800">
-                        <img alt="Premium Calf Slipper" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfALm0-CWPtScSzTWahKixq42HRThqGdmOd7zeeUCC7hKegAfx-E8xJngFiocrj7FxXTILImZRm-CQ65LCojIWzLxnfoSD4usrYGE59fxD0fUwoBPjSQDcgngzCWtlmttUK6oEp7OrKLv5UlJkGi8XVF0IrZl87OVOhDhU4G85Jr0t4VtSjSIzVDP9oRbyHCX0rOgZMuajxIvPULNs2pgHvwAFIIQKJu8hJaGhEPSoaWA36fIsD_sHB2ej9eEfVsKlt9yIkxrfB9pi"/>
-                        <div class="absolute inset-x-0 bottom-0 p-3 md:p-4">
-                            <button class="cart-btn w-full bg-primary/95 backdrop-blur-sm hover:bg-primary text-white font-bold py-2.5 md:py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg hover:shadow-primary/30 transition-all active:scale-95" routerLink="/cart">
-                                <span class="material-symbols-outlined text-lg md:text-xl">shopping_bag</span>
-                                <span class="text-sm md:text-base">Add to Cart</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-4 flex flex-col flex-grow">
-                        <div class="flex justify-between items-start mb-1" routerLink="/product-details" class="cursor-pointer">
-                            <h3 class="text-sm md:text-base font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors line-clamp-1">Premium Calf Slipper</h3>
-                            <button class="text-slate-300 hover:text-red-500 transition-colors">
-                                <span class="material-symbols-outlined text-[20px]">favorite</span>
-                            </button>
-                        </div>
-                        <div class="flex items-center gap-1 mb-3">
-                            <div class="flex text-amber-400">
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm">star_outline</span>
-                            </div>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">(12)</span>
-                        </div>
-                        <div class="mt-auto">
-                            <span class="text-base md:text-lg font-extrabold text-slate-900 dark:text-white">GHS 850.00</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card group relative flex flex-col bg-white dark:bg-slate-900/50 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
-                    <div class="relative aspect-square overflow-hidden bg-slate-50 dark:bg-slate-800">
-                        <img alt="Junior Adventure Slide" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzOAzR4g5epOsPG4fXT5XXxHdZqD4YSrQyiCMl-n_rrahckA5Y-8TMM8-1TGdnG0w6tzOmWWgJ_htIMwmTonxV8sUuYe-5n-3kDRL7ylC_XzbmYeGUuN1TdpZm7mbsXOjMrTIAEW3FXlJLOTgtBjAjoyDeiP444qfmGBoJibTpbjaM8HDc7KFiRbgSXkajVNclkwHvwvRPGge6xkm26OmnYHVm-x7jCjLr36jin4Ng-JJffh-66bkijMikD985alrRMVCiuEXFdFsI"/>
-                        <div class="absolute inset-x-0 bottom-0 p-3 md:p-4">
-                            <button class="cart-btn w-full bg-primary/95 backdrop-blur-sm hover:bg-primary text-white font-bold py-2.5 md:py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg hover:shadow-primary/30 transition-all active:scale-95" routerLink="/cart">
-                                <span class="material-symbols-outlined text-lg md:text-xl">shopping_bag</span>
-                                <span class="text-sm md:text-base">Add to Cart</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-4 flex flex-col flex-grow">
-                        <div class="flex justify-between items-start mb-1" routerLink="/product-details" class="cursor-pointer">
-                            <h3 class="text-sm md:text-base font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors line-clamp-1">Junior Adventure Slide</h3>
-                            <button class="text-slate-300 hover:text-red-500 transition-colors">
-                                <span class="material-symbols-outlined text-[20px]">favorite</span>
-                            </button>
-                        </div>
-                        <div class="flex items-center gap-1 mb-3">
-                            <div class="flex text-amber-400">
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                            </div>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">(31)</span>
-                        </div>
-                        <div class="mt-auto">
-                            <span class="text-base md:text-lg font-extrabold text-slate-900 dark:text-white">GHS 280.00</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card group relative flex flex-col bg-white dark:bg-slate-900/50 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
-                    <div class="relative aspect-square overflow-hidden bg-slate-50 dark:bg-slate-800">
-                        <img alt="Seasonal Harvest Limited" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsHyp3uFUVYAcH-dahMCJb52rkIjLFg0lTtQuueVfO-gxNu0qDpRESZFIZXy3DFGG8LkK9s9LfOCcfaSPQF9MIcJivK8KBmBZn5myCgxwFEax-OaLNI_MoI9ZdJGc_FvTQgebbQfnVg6TgxgzPUdwE6xC5vZCno0KBswGhga0SIyuiHLLvfqbwB_gTVV5G8cJE9GwRCWnMgG8RawEW-QP_jNZfIYCVdTGHC7E5pwnY-KyEYWALI-mGY04MLhn4ZU_3nvYjvv9pal56"/>
-                        <div class="absolute top-3 left-3 z-10">
-                            <span class="bg-primary text-white text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-widest">New Arrival</span>
-                        </div>
-                        <div class="absolute inset-x-0 bottom-0 p-3 md:p-4">
-                            <button class="cart-btn w-full bg-primary/95 backdrop-blur-sm hover:bg-primary text-white font-bold py-2.5 md:py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg hover:shadow-primary/30 transition-all active:scale-95" routerLink="/cart">
-                                <span class="material-symbols-outlined text-lg md:text-xl">shopping_bag</span>
-                                <span class="text-sm md:text-base">Add to Cart</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-4 flex flex-col flex-grow">
-                        <div class="flex justify-between items-start mb-1" routerLink="/product-details" class="cursor-pointer">
-                            <h3 class="text-sm md:text-base font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors line-clamp-1">Seasonal Harvest Limited</h3>
-                            <button class="text-slate-300 hover:text-red-500 transition-colors">
-                                <span class="material-symbols-outlined text-[20px]">favorite</span>
-                            </button>
-                        </div>
-                        <div class="flex items-center gap-1 mb-3">
-                            <div class="flex text-amber-400">
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm">star_half</span>
-                            </div>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">(5)</span>
-                        </div>
-                        <div class="mt-auto">
-                            <span class="text-base md:text-lg font-extrabold text-slate-900 dark:text-white">GHS 950.00</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-card group relative flex flex-col bg-white dark:bg-slate-900/50 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
-                    <div class="relative aspect-square overflow-hidden bg-slate-50 dark:bg-slate-800">
-                        <img alt="Custom Motif Slide" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYtG47v9DTBESFFc3x0yPnJ3XCBA9QrAKr23WsfIQlz4vWCTpmmTYhZg35fkak5IcUykUK0hlpkpzYJs7VMv6qux54zrho2tLiPYRm5k8vINRDnb69bg-FEcUFwnwDwrRub2XUjgjfYMAMDVkUaF2KUNwMF2VOSGeqIh3H4g5FV_PQkmkb-JhuIp41FjkbpE8ri0mA5Il3MzpdKEoiot5_vTayu4uamS_qX7OCit0fNaivtVk28ToAWT8hNZlfKamG2OrbarH9Ajz5"/>
-                        <div class="absolute inset-x-0 bottom-0 p-3 md:p-4">
-                            <button class="cart-btn w-full bg-primary/95 backdrop-blur-sm hover:bg-primary text-white font-bold py-2.5 md:py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg hover:shadow-primary/30 transition-all active:scale-95" routerLink="/cart">
-                                <span class="material-symbols-outlined text-lg md:text-xl">shopping_bag</span>
-                                <span class="text-sm md:text-base">Add to Cart</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-4 flex flex-col flex-grow">
-                        <div class="flex justify-between items-start mb-1" routerLink="/product-details" class="cursor-pointer">
-                            <h3 class="text-sm md:text-base font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors line-clamp-1">Custom Motif Slide</h3>
-                            <button class="text-slate-300 hover:text-red-500 transition-colors">
-                                <span class="material-symbols-outlined text-[20px]">favorite</span>
-                            </button>
-                        </div>
-                        <div class="flex items-center gap-1 mb-3">
-                            <div class="flex text-amber-400">
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                                <span class="material-symbols-outlined text-sm fill-current">star</span>
-                            </div>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">(102)</span>
-                        </div>
-                        <div class="mt-auto">
-                            <span class="text-base md:text-lg font-extrabold text-slate-900 dark:text-white">GHS 1,200.00</span>
-                        </div>
-                    </div>
-                </div>
+            
+            <!-- Loading State -->
+            <div *ngIf="isLoading" class="flex flex-col items-center justify-center py-20 text-slate-500">
+                <div class="w-12 h-12 border-4 border-slate-200 border-t-primary rounded-full animate-spin mb-4"></div>
+                <p>Loading products...</p>
             </div>
-            <div class="mt-16 flex items-center justify-center gap-2">
-                <button class="h-10 w-10 flex items-center justify-center rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-primary transition-all">
-                    <span class="material-symbols-outlined text-lg">chevron_left</span>
-                </button>
-                <button class="h-10 w-10 flex items-center justify-center rounded-lg bg-primary text-white font-bold">1</button>
-                <button class="h-10 w-10 flex items-center justify-center rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-primary transition-all">2</button>
-                <button class="h-10 w-10 flex items-center justify-center rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-primary transition-all">3</button>
-                <span class="px-2 text-slate-400">...</span>
-                <button class="h-10 w-10 flex items-center justify-center rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-500 hover:text-primary transition-all">
-                    <span class="material-symbols-outlined text-lg">chevron_right</span>
-                </button>
+
+            <!-- Empty State -->
+            <div *ngIf="!isLoading && filteredProducts.length === 0" class="flex flex-col items-center justify-center py-20 text-slate-500 text-center">
+                <span class="material-symbols-outlined text-4xl mb-4 text-slate-300">inventory_2</span>
+                <p class="text-lg font-bold text-slate-700 dark:text-slate-300">No products found</p>
+                <p class="text-sm">Try selecting a different category or clearing filters.</p>
             </div>
+
+            <div *ngIf="!isLoading && filteredProducts.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                
+                <div *ngFor="let product of filteredProducts" class="product-card group relative flex flex-col bg-white dark:bg-slate-900/50 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-primary/10">
+                    <div class="relative aspect-square overflow-hidden bg-slate-50 dark:bg-slate-800">
+                        <img [alt]="product.productName" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" [src]="product.productImage"/>
+                        <div class="absolute inset-x-0 bottom-0 p-3 md:p-4">
+                            <button class="cart-btn w-full bg-primary/95 backdrop-blur-sm hover:bg-primary text-white font-bold py-2.5 md:py-3 rounded-xl flex items-center justify-center gap-2 shadow-lg hover:shadow-primary/30 transition-all active:scale-95" routerLink="/cart">
+                                <span class="material-symbols-outlined text-lg md:text-xl">shopping_bag</span>
+                                <span class="text-sm md:text-base">Add to Cart</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4 flex flex-col flex-grow">
+                        <div class="flex justify-between items-start mb-1 cursor-pointer" routerLink="/product-details">
+                            <h3 class="text-sm md:text-base font-bold text-slate-900 dark:text-white group-hover:text-primary transition-colors line-clamp-1">{{ product.productName }}</h3>
+                            <button class="text-slate-300 hover:text-red-500 transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">favorite</span>
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-1 mb-3">
+                             <div class="flex text-amber-400">
+                                <span class="material-symbols-outlined text-sm fill-current">star</span>
+                                <span class="material-symbols-outlined text-sm fill-current">star</span>
+                                <span class="material-symbols-outlined text-sm fill-current">star</span>
+                                <span class="material-symbols-outlined text-sm fill-current">star</span>
+                                <span class="material-symbols-outlined text-sm fill-current">star</span>
+                            </div>
+                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">(new)</span>
+                        </div>
+                        <div class="mt-auto">
+                            <span class="text-base md:text-lg font-extrabold text-slate-900 dark:text-white">GHS {{ product.productPrice }}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
         </div>
     </div>
 </section>
