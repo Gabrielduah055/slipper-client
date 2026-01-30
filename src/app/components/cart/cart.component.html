@@ -33,22 +33,22 @@
             
             <!-- Cart Items List -->
             <div *ngFor="let item of cartItems$ | async" class="flex gap-4 bg-white dark:bg-slate-900/50 p-4 rounded-xl border border-[#e7f3f3] dark:border-gray-800 shadow-sm transition-all hover:shadow-md">
-                <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-24 md:size-32 shrink-0 bg-slate-100 dark:bg-slate-800" [style.background-image]="'url(' + item.product.productImage + ')'"></div>
+                <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-24 md:size-32 shrink-0 bg-slate-100 dark:bg-slate-800" [style.background-image]="'url(' + item.productImage + ')'"></div>
                 <div class="flex flex-1 flex-col justify-between">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="text-[#0d1b1b] dark:text-white text-base md:text-lg font-bold leading-tight line-clamp-2" [routerLink]="['/product-details', item.product._id]" class="cursor-pointer hover:text-primary transition-colors">{{ item.product.productName }}</p>
+                            <p class="text-[#0d1b1b] dark:text-white text-base md:text-lg font-bold leading-tight line-clamp-2" [routerLink]="['/product-details', item.productId]" class="cursor-pointer hover:text-primary transition-colors">{{ item.productName }}</p>
                             <p class="text-[#4c9a9a] text-sm font-normal mt-1">Size: {{ item.size }}</p>
                         </div>
-                        <p class="text-[#0d1b1b] dark:text-white font-bold text-lg">GHS {{ item.product.productPrice }}</p>
+                        <p class="text-[#0d1b1b] dark:text-white font-bold text-lg">GHS {{ item.price }}</p>
                     </div>
                     <div class="flex justify-between items-center mt-4">
                         <div class="flex items-center gap-3 text-[#0d1b1b] dark:text-white bg-[#e7f3f3] dark:bg-gray-800 rounded-full px-3 py-1">
-                            <button class="text-lg font-bold h-8 w-8 hover:text-primary transition-colors flex items-center justify-center" (click)="updateQuantity(item.product._id, item.size, item.quantity - 1)">-</button>
+                            <button class="text-lg font-bold h-8 w-8 hover:text-primary transition-colors flex items-center justify-center" (click)="updateQuantity(item.productId, item.size, item.quantity - 1)">-</button>
                             <span class="font-bold min-w-[20px] text-center">{{ item.quantity }}</span>
-                            <button class="text-lg font-bold h-8 w-8 hover:text-primary transition-colors flex items-center justify-center" (click)="updateQuantity(item.product._id, item.size, item.quantity + 1)">+</button>
+                            <button class="text-lg font-bold h-8 w-8 hover:text-primary transition-colors flex items-center justify-center" (click)="updateQuantity(item.productId, item.size, item.quantity + 1)">+</button>
                         </div>
-                        <button class="text-gray-400 hover:text-red-500 transition-colors" (click)="removeItem(item.product._id, item.size)">
+                        <button class="text-gray-400 hover:text-red-500 transition-colors" (click)="removeItem(item.productId, item.size)">
                             <span class="material-symbols-outlined">delete</span>
                         </button>
                     </div>
@@ -91,45 +91,58 @@
                 <!-- Checkout Form -->
                 <div class="bg-white dark:bg-slate-900/50 p-6 rounded-xl border border-[#e7f3f3] dark:border-gray-800 shadow-lg">
                     <h3 class="text-xl font-black mb-6">Delivery Details</h3>
-                    <form class="space-y-4">
-                        <div class="space-y-1">
-                            <label class="text-xs font-bold uppercase text-[#4c9a9a]">Full Name</label>
-                            <input class="w-full bg-[#f6f8f8] dark:bg-slate-800 border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary text-slate-900 dark:text-white" placeholder="Kofi Mensah" type="text"/>
-                        </div>
+                    <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()" class="space-y-4">
                         <div class="grid grid-cols-2 gap-4">
                             <div class="space-y-1">
-                                <label class="text-xs font-bold uppercase text-[#4c9a9a]">Phone Number</label>
-                                <input class="w-full bg-[#f6f8f8] dark:bg-slate-800 border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary text-slate-900 dark:text-white" placeholder="024 123 4567" type="tel"/>
+                                <label class="text-xs font-bold uppercase text-[#4c9a9a]">First Name</label>
+                                <input formControlName="firstName" class="w-full bg-[#f6f8f8] dark:bg-slate-800 border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary text-slate-900 dark:text-white" placeholder="Kofi" type="text"/>
+                                <div *ngIf="checkoutForm.get('firstName')?.touched && checkoutForm.get('firstName')?.invalid" class="text-red-500 text-xs">First Name is required</div>
                             </div>
                             <div class="space-y-1">
-                                <label class="text-xs font-bold uppercase text-primary">WhatsApp (Active)</label>
-                                <input class="w-full bg-[#f6f8f8] dark:bg-slate-800 border-none rounded-lg p-3 text-sm border border-primary/30 focus:ring-2 focus:ring-primary text-slate-900 dark:text-white" placeholder="050 987 6543" type="tel"/>
+                                <label class="text-xs font-bold uppercase text-[#4c9a9a]">Last Name</label>
+                                <input formControlName="lastName" class="w-full bg-[#f6f8f8] dark:bg-slate-800 border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary text-slate-900 dark:text-white" placeholder="Mensah" type="text"/>
+                                <div *ngIf="checkoutForm.get('lastName')?.touched && checkoutForm.get('lastName')?.invalid" class="text-red-500 text-xs">Last Name is required</div>
                             </div>
                         </div>
+
+                        <div class="space-y-1">
+                            <label class="text-xs font-bold uppercase text-[#4c9a9a]">Email Address</label>
+                            <input formControlName="email" class="w-full bg-[#f6f8f8] dark:bg-slate-800 border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary text-slate-900 dark:text-white" placeholder="kofi@example.com" type="email"/>
+                            <div *ngIf="checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid" class="text-red-500 text-xs">Valid Email is required</div>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="text-xs font-bold uppercase text-[#4c9a9a]">Phone Number</label>
+                            <input formControlName="phoneNumber" class="w-full bg-[#f6f8f8] dark:bg-slate-800 border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary text-slate-900 dark:text-white" placeholder="024 123 4567" type="tel"/>
+                            <div *ngIf="checkoutForm.get('phoneNumber')?.touched && checkoutForm.get('phoneNumber')?.invalid" class="text-red-500 text-xs">Valid Phone Number is required</div>
+                        </div>
+
                         <div class="space-y-1">
                             <label class="text-xs font-bold uppercase text-[#4c9a9a]">Delivery Address</label>
-                            <textarea class="w-full bg-[#f6f8f8] dark:bg-slate-800 border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary text-slate-900 dark:text-white" placeholder="House No. 4, Spintex Road, Opposite Zenith Bank..." rows="3"></textarea>
+                            <textarea formControlName="address" class="w-full bg-[#f6f8f8] dark:bg-slate-800 border-none rounded-lg p-3 text-sm focus:ring-2 focus:ring-primary text-slate-900 dark:text-white" placeholder="House No. 4, Spintex Road, Opposite Zenith Bank..." rows="3"></textarea>
+                            <div *ngIf="checkoutForm.get('address')?.touched && checkoutForm.get('address')?.invalid" class="text-red-500 text-xs">Address is required</div>
                         </div>
                         <div class="pt-4 space-y-3">
                             <label class="text-xs font-bold uppercase text-[#4c9a9a]">Payment Method</label>
                             <div class="grid grid-cols-3 gap-2">
-                                <button class="flex flex-col items-center justify-center gap-1 p-2 border-2 border-primary rounded-lg bg-primary/10" type="button">
+                                <button (click)="setPaymentMethod('momo')" [ngClass]="{'border-primary bg-primary/10 border-2': checkoutForm.get('paymentMethod')?.value === 'momo', 'border-[#e7f3f3] dark:border-gray-700 border': checkoutForm.get('paymentMethod')?.value !== 'momo'}" class="flex flex-col items-center justify-center gap-1 p-2 rounded-lg hover:border-primary/50 transition-colors" type="button">
                                     <span class="material-symbols-outlined text-primary">phone_iphone</span>
                                     <span class="text-[10px] font-bold text-slate-900 dark:text-white">MoMo</span>
                                 </button>
-                                <button class="flex flex-col items-center justify-center gap-1 p-2 border border-[#e7f3f3] dark:border-gray-700 rounded-lg hover:border-primary/50 transition-colors" type="button">
+                                <button (click)="setPaymentMethod('card')" [ngClass]="{'border-primary bg-primary/10 border-2': checkoutForm.get('paymentMethod')?.value === 'card', 'border-[#e7f3f3] dark:border-gray-700 border': checkoutForm.get('paymentMethod')?.value !== 'card'}" class="flex flex-col items-center justify-center gap-1 p-2 rounded-lg hover:border-primary/50 transition-colors" type="button">
                                     <span class="material-symbols-outlined text-slate-500">credit_card</span>
                                     <span class="text-[10px] font-bold text-slate-900 dark:text-white">Card</span>
                                 </button>
-                                <button class="flex flex-col items-center justify-center gap-1 p-2 border border-[#e7f3f3] dark:border-gray-700 rounded-lg hover:border-primary/50 transition-colors" type="button">
+                                <button (click)="setPaymentMethod('cod')" [ngClass]="{'border-primary bg-primary/10 border-2': checkoutForm.get('paymentMethod')?.value === 'cod', 'border-[#e7f3f3] dark:border-gray-700 border': checkoutForm.get('paymentMethod')?.value !== 'cod'}" class="flex flex-col items-center justify-center gap-1 p-2 rounded-lg hover:border-primary/50 transition-colors" type="button">
                                     <span class="material-symbols-outlined text-slate-500">payments</span>
                                     <span class="text-[10px] font-bold text-slate-900 dark:text-white">COD</span>
                                 </button>
                             </div>
                         </div>
-                        <button class="w-full bg-primary text-white font-black py-4 rounded-xl shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 mt-6" type="submit">
-                            <span class="material-symbols-outlined">lock</span>
-                            Pay &amp; Place Order
+                        <button [disabled]="checkoutForm.invalid || isSubmitting" class="w-full bg-primary text-white font-black py-4 rounded-xl shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 mt-6 disabled:opacity-50 disabled:cursor-not-allowed" type="submit">
+                            <span *ngIf="!isSubmitting" class="material-symbols-outlined">lock</span>
+                            <span *ngIf="isSubmitting" class="animate-spin material-symbols-outlined">refresh</span>
+                            {{ isSubmitting ? 'Processing...' : 'Pay & Place Order' }}
                         </button>
                         <p class="text-[10px] text-center text-[#4c9a9a]">By placing your order, you agree to our Terms of Service</p>
                     </form>

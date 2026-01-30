@@ -10,7 +10,7 @@ import { ProductResponse, Product } from '../interfaces/product.interface';
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = environment.apiUrl;
+  private apiUrl = `${environment.apiUrl}/product`;
   
   // Cache variables to store the observables
   private categoriesCache$: Observable<CategoryResponse> | null = null;
