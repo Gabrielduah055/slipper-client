@@ -4,7 +4,8 @@ export interface CustomerInfo {
     fullName: string;
     phoneNumber: string;
     whatsappNumber?: string;
-    deliveryAddress: string;
+    deliveryAddress?: string; // Made optional
+    address?: string; // Added address to match what we might receive
 }
 
 export interface Order {

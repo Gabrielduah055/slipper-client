@@ -26,9 +26,14 @@
         <div class="lg:col-span-7 flex flex-col gap-6">
             <div class="flex items-center justify-between border-b border-[#e7f3f3] dark:border-gray-800 pb-2">
                 <h3 class="text-lg font-bold">{{ (cartItems$ | async)?.length }} Items</h3>
-                <button class="text-[#4c9a9a] text-sm font-medium hover:text-red-500 transition-colors flex items-center gap-1" (click)="clearCart()">
-                    <span class="material-symbols-outlined text-[18px]">delete_sweep</span> Clear All
-                </button>
+                <div class="flex gap-4">
+                    <button class="text-primary text-sm font-medium hover:underline flex items-center gap-1" routerLink="/shop">
+                        <span class="material-symbols-outlined text-[18px]">add_shopping_cart</span> Continue Shopping
+                    </button>
+                    <button class="text-[#4c9a9a] text-sm font-medium hover:text-red-500 transition-colors flex items-center gap-1" (click)="clearCart()">
+                        <span class="material-symbols-outlined text-[18px]">delete_sweep</span> Clear All
+                    </button>
+                </div>
             </div>
             
             <!-- Cart Items List -->
