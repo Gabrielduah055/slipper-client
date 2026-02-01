@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../interfaces/product.interface';
 import { CartService } from '../../services/cart.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-product-details',
@@ -17,13 +18,12 @@ export class ProductDetailsComponent implements OnInit {
   mainImage: string = '';
   relatedProducts: Product[] = [];
   selectedSize: number | null = null;
-  quantity: number = 1;
-  
   // Available sizes range
   availableSizes: number[] = [38, 39, 40, 41, 42, 43, 44, 45];
   
   private productService = inject(ProductService);
   private cartService = inject(CartService);
+  private toastService = inject(ToastService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
@@ -53,8 +53,6 @@ export class ProductDetailsComponent implements OnInit {
     this.mainImage = product.productImage;
     // Ensure productSize is selected
     this.selectedSize = product.productSize;
-    // Reset quantity
-    this.quantity = 1;
     
     // Scroll to top when loading new product
     window.scrollTo(0, 0);
@@ -79,26 +77,20 @@ export class ProductDetailsComponent implements OnInit {
     return size === this.product?.productSize;
   }
 
-  increaseQuantity() {
-    this.quantity++;
-  }
-
-  decreaseQuantity() {
-    if (this.quantity > 1) {
-      this.quantity--;
-    }
-  }
-
   addToCart() {
     if (this.product && this.selectedSize) {
-      this.cartService.addToCart(this.product, this.quantity, this.selectedSize);
-      // Optional: Show a toast/notification here
+      this.cartService.addToCart(this.product, this.selectedSize, 1);
+      this.toastService.show(
+        'Added to cart successfully!', 
+        'success', 
+        { label: 'View Cart', route: '/cart' }
+      );
     }
   }
 
   buyItNow() {
     if (this.product && this.selectedSize) {
-      this.cartService.addToCart(this.product, this.quantity, this.selectedSize);
+      this.cartService.addToCart(this.product, this.selectedSize, 1);
       this.router.navigate(['/cart']);
     }
   }

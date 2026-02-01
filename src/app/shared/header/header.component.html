@@ -34,6 +34,15 @@
       <!-- Right Actions -->
       <div class="flex items-center gap-2 sm:gap-4">
         
+        <!-- Cart Icon with Badge (Visible on all screens) -->
+        <button class="relative p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors" routerLink="/cart">
+            <span class="material-symbols-outlined text-slate-900 dark:text-white">shopping_cart</span>
+            <span *ngIf="(cartCount$ | async) as count" 
+                  class="absolute top-0 right-0 -mt-1 -mr-1 bg-primary text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full border-2 border-white dark:border-slate-900">
+                {{ count }}
+            </span>
+        </button>
+
         <!-- Mobile Actions (Search & Menu Only) -->
         <button class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors lg:hidden" (click)="toggleSearch()">
             <span class="material-symbols-outlined text-slate-900 dark:text-white">search</span>
@@ -66,7 +75,7 @@
         <div class="pt-2 flex flex-col gap-3">
             <a class="flex items-center gap-3 text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-primary py-2" routerLink="/cart" (click)="closeMenu()">
                 <span class="material-symbols-outlined">shopping_cart</span>
-                <span>Cart (3)</span>
+                <span>Cart ({{ (cartCount$ | async) || 0 }})</span>
             </a>
             <a class="flex items-center gap-3 text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-primary py-2" (click)="closeMenu()">
                 <span class="material-symbols-outlined">person</span>

@@ -1,0 +1,98 @@
+<div class="max-w-[800px] mx-auto px-6 lg:px-10 py-12 min-h-[60vh]">
+    <!-- Breadcrumbs -->
+    <div class="flex flex-wrap gap-2 mb-8">
+        <a class="text-[#4c9a9a] text-sm font-medium hover:underline" routerLink="/">Home</a>
+        <span class="text-[#4c9a9a] text-sm font-medium">/</span>
+        <span class="text-[#0d1b1b] dark:text-white text-sm font-medium">Track Order</span>
+    </div>
+
+    <div class="text-center mb-10">
+        <h1 class="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-4">Track Your Order</h1>
+        <p class="text-slate-500 dark:text-slate-400">Enter your Order ID below to check the current status of your delivery.</p>
+    </div>
+
+    <!-- Search Form -->
+    <div class="bg-white dark:bg-slate-900/50 rounded-2xl p-6 shadow-lg border border-slate-100 dark:border-slate-800 mb-10">
+        <form (ngSubmit)="trackOrder()" class="flex flex-col md:flex-row gap-4">
+            <div class="flex-1 relative">
+                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                <input 
+                    [(ngModel)]="orderId" 
+                    name="orderId"
+                    type="text" 
+                    placeholder="Enter Order ID (e.g., 65c4a...)" 
+                    class="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-800 border-none rounded-xl focus:ring-2 focus:ring-primary text-slate-900 dark:text-white placeholder-slate-400 transition-all"
+                    [disabled]="isLoading"
+                >
+            </div>
+            <button 
+                type="submit" 
+                [disabled]="!orderId.trim() || isLoading"
+                class="bg-primary text-white font-bold py-4 px-8 rounded-xl hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 min-w-[140px]"
+            >
+                <span *ngIf="isLoading" class="material-symbols-outlined animate-spin">refresh</span>
+                <span *ngIf="!isLoading">Track</span>
+            </button>
+        </form>
+        
+        <p *ngIf="error" class="text-red-500 text-sm mt-4 flex items-center gap-2">
+            <span class="material-symbols-outlined text-base">error</span> {{ error }}
+        </p>
+    </div>
+
+    <!-- Results Section -->
+    <div *ngIf="order" class="animate-fade-in">
+        <div class="bg-white dark:bg-slate-900/50 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+            <!-- Header -->
+            <div class="bg-slate-50 dark:bg-slate-800/50 p-6 border-b border-slate-200 dark:border-slate-800 flex flex-wrap justify-between items-center gap-4">
+                <div>
+                    <p class="text-xs text-slate-500 uppercase tracking-wider font-bold mb-1">Order ID</p>
+                    <p class="font-mono text-slate-900 dark:text-white font-bold">{{ order._id }}</p>
+                </div>
+                <div [class]="'px-4 py-2 rounded-full border flex items-center gap-2 ' + getStatusColor(order.status)">
+                    <span class="material-symbols-outlined text-lg">{{ getStatusIcon(order.status) }}</span>
+                    <span class="font-bold uppercase text-xs tracking-wider">{{ order.status }}</span>
+                </div>
+            </div>
+
+            <!-- Details -->
+            <div class="p-6 md:p-8 grid md:grid-cols-2 gap-8">
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-4 border-b border-slate-100 dark:border-slate-800 pb-2">Customer Details</h4>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Name:</span>
+                            <span class="font-medium text-slate-900 dark:text-white">{{ order.customer.fullName }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Phone:</span>
+                            <span class="font-medium text-slate-900 dark:text-white">{{ order.customer.phoneNumber }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Address:</span>
+                            <span class="font-medium text-slate-900 dark:text-white text-right max-w-[60%]">{{ order.customer.address }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-slate-900 dark:text-white mb-4 border-b border-slate-100 dark:border-slate-800 pb-2">Order Summary</h4>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Items:</span>
+                            <span class="font-medium text-slate-900 dark:text-white">{{ order.items.length }} items</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-slate-500">Payment Method:</span>
+                            <span class="font-medium text-slate-900 dark:text-white uppercase">{{ order.paymentMethod }}</span>
+                        </div>
+                        <div class="flex justify-between pt-2 border-t border-dashed border-slate-200 dark:border-slate-700">
+                            <span class="font-bold text-slate-900 dark:text-white">Total:</span>
+                            <span class="font-black text-primary text-lg">GHS {{ order.totalAmount }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

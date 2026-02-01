@@ -4,12 +4,26 @@ import { CategoryComponent } from './components/category/category.component';
 import { AllProductsComponent } from './components/all-products/all-products.component';
 import { ProductDetailsComponent } from './components/product-details/product-details.component';
 import { CartComponent } from './components/cart/cart.component';
+import { BulkOrdersComponent } from './components/bulk-orders/bulk-orders.component';
+import { CareGuideComponent } from './components/care-guide/care-guide.component';
+import { ReturnPolicyComponent } from './components/return-policy/return-policy.component';
+import { TrackOrderComponent } from './components/track-order/track-order.component';
+import { SizeGuideComponent } from './components/size-guide/size-guide.component';
+import { FaqsComponent } from './components/faqs/faqs.component';
+import { GiftCardsComponent } from './components/gift-cards/gift-cards.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'categories', component: CategoryComponent },
     { path: 'shop', component: AllProductsComponent },
-    { path: 'product-details/:id', component: ProductDetailsComponent }, // Added :id parameter
+    { path: 'product-details/:id', component: ProductDetailsComponent },
     { path: 'cart', component: CartComponent },
+    { path: 'bulk-orders', component: BulkOrdersComponent },
+    { path: 'care-guide', component: CareGuideComponent },
+    { path: 'return-policy', component: ReturnPolicyComponent },
+    { path: 'track-order', component: TrackOrderComponent },
+    { path: 'size-guide', component: SizeGuideComponent },
+    { path: 'faqs', component: FaqsComponent },
+    { path: 'gift-cards', component: GiftCardsComponent },
     { path: '**', redirectTo: '' }
 ];
