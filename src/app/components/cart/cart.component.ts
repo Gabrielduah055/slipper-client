@@ -4,8 +4,10 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
 import { OrderService } from '../../services/order.service';
-import { Order } from '../../interfaces/order.interface';
 import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../environments/environment';
+
+declare const PaystackPop: any;
 
 @Component({
   selector: 'app-cart',
@@ -61,12 +63,62 @@ export class CartComponent {
 
     this.isSubmitting = true;
     const formValue = this.checkoutForm.value;
-    
+    const paymentMethod = formValue.paymentMethod;
+
+    if (paymentMethod === 'cod') {
+        // Cash on Delivery - Create order directly
+        this.createOrder('pending', { method: 'cod', status: 'pending' });
+    } else {
+        this.startPaystackPayment();
+    }
+  }
+
+  startPaystackPayment() {
+    const formValue = this.checkoutForm.value;
+
+    const handler = PaystackPop.setup({
+      key: environment.paystackPublicKey,
+      email: formValue.email,
+      amount: this.total * 100,
+      currency: 'GHS',
+      ref: `SLIPPERS-${Date.now()}`,
+      channels: ['card', 'mobile_money'],
+      metadata: {
+        custom_fields: [
+          { display_name: 'Customer Name', variable_name: 'customer_name', value: `${formValue.firstName} ${formValue.lastName}` },
+          { display_name: 'Phone Number', variable_name: 'phone_number', value: formValue.phoneNumber }
+        ]
+      },
+      mobile_money: {
+        phone: formValue.phoneNumber
+      },
+      callback: (response: any) => this.onPaymentSuccess(response),
+      onClose: () => this.onPaymentCancel()
+    });
+
+    handler.openIframe();
+  }
+
+  onPaymentCancel() {
+    this.isSubmitting = false;
+    alert('Payment cancelled');
+  }
+
+  onPaymentSuccess(ref: any) {
+    // Payment successful, create the order
+    const paymentInfo = {
+        method: this.checkoutForm.value.paymentMethod, // 'momo' or 'card'
+        status: 'paid',
+        transactionId: ref.reference
+    };
+    this.createOrder('processing', paymentInfo); // Status 'processing' as it's paid
+  }
+
+  async createOrder(initialStatus: string, paymentInfo: any) {
     try {
       const currentItems = await firstValueFrom(this.cartItems$);
+      const formValue = this.checkoutForm.value;
 
-      // Simplify items to just the essential IDs and quantities
-      // This avoids sending extra fields (like images/names) that strict backends might reject
       const orderItems = currentItems.map(item => ({
         product: item.productId,
         quantity: item.quantity,
@@ -74,7 +126,6 @@ export class CartComponent {
         price: item.price
       }));
 
-      // 2. Construct the payload matching the backend controller
       const orderData = {
         firstName: formValue.firstName,
         lastName: formValue.lastName,
@@ -86,18 +137,24 @@ export class CartComponent {
 
       console.log('Sending Order Payload:', orderData);
 
-      // Cast to 'any' temporarily to allow the structural change without interface errors
       this.orderService.createOrder(orderData as any).subscribe({
         next: (res) => {
           this.isSubmitting = false;
           this.cartService.clearCart();
-          alert('Order placed successfully!');
+          
+          let message = 'Order placed successfully!';
+          if (paymentInfo.status === 'paid') {
+              message += ' Payment confirmed.';
+          } else {
+              message += ' Please pay on delivery.';
+          }
+          
+          alert(message);
           this.router.navigate(['/']);
         },
         error: (err) => {
           this.isSubmitting = false;
           console.error('Order creation failed:', err);
-          
           const errorMessage = err.error?.message || err.error || 'Unknown error';
           alert(`Failed to place order: ${JSON.stringify(errorMessage)}`);
         }
